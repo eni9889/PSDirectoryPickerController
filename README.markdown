@@ -6,3 +6,15 @@
     [directoryPicker setModalPresentationStyle:UIModalPresentationFormSheet];
     
     [self presentModalViewController:directoryPicker animated:YES];
+
+---
+
+    - (void)directoryPickerControllerDidCancel:(PSDirectoryPickerController *)picker
+    {
+    	NSLog(@"Cancelled!");
+	}
+
+	- (void)directoryPickerController:(PSDirectoryPickerController *)picker didFinishPickingDirectoryAtPath:(NSString *)path
+	{
+	    NSLog(@"Picked directory at %@", path);
+	}
