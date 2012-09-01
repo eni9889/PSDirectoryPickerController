@@ -27,4 +27,12 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [_path release];
+    [_name release];
+    
+    [super dealloc];
+}
+
 @end

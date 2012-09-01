@@ -1,3 +1,9 @@
+![PSDirectoryPickerController](http://d.pr/i/EBOW+)
+
+#Compatibility
+- Compatible with iPhone/iPod Touch & iPad.
+- **Requires iOS 5 or higher.**
+
 #Sample use
     PSDirectoryPickerController *directoryPicker = [[PSDirectoryPickerController alloc] initWithRootDirectory:@"/path/to/some/directory/"];
     

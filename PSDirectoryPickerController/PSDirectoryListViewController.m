@@ -20,7 +20,7 @@
     self = [super init];
     
     if (self) {
-        _path = aPath;
+        _path = [aPath copy];
         [self rebuildFileList];
     }
     
@@ -50,7 +50,11 @@
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:doneButtonTitle style:UIBarButtonItemStyleDone target:[self navigationController] action:@selector(doneButtonTapped)];
     
     // Add them to the toolbar.
-    [self setToolbarItems:[NSArray arrayWithObjects:cancelButton, flexibleSpace, doneButton, nil]];    
+    [self setToolbarItems:[NSArray arrayWithObjects:cancelButton, flexibleSpace, doneButton, nil]];
+    
+    [cancelButton release];
+    [flexibleSpace release];
+    [doneButton release];
 }
 
 - (void)viewDidUnload
@@ -63,6 +67,13 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)dealloc
+{
+    [_path release];
+    
+    [super dealloc];
 }
 
 - (NSString *)title
@@ -83,6 +94,7 @@
             
             PSDirectoryPickerEntry *entry = [[PSDirectoryPickerEntry alloc] initWithPath:fullPath name:file dir:isDir];
             [visibleFiles addObject:entry];
+            [entry release];
         }
     }
 
@@ -128,7 +140,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
     PSDirectoryPickerEntry *entry = [[self files] objectAtIndex:[indexPath row]];

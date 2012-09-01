@@ -36,6 +36,7 @@
         // Set up the inital directory list.
         PSDirectoryListViewController *directoryList = [[PSDirectoryListViewController alloc] initWithDirectoryAtPath:_rootDirectory];
         [self pushViewController:directoryList animated:NO];
+        [directoryList release];
         
         // Set default done button title.
         _doneButtonTitle = @"Done";
@@ -52,11 +53,20 @@
     return YES;
 }
 
+- (void)dealloc
+{
+    [_rootDirectory release];
+    
+    [super dealloc];
+}
+
 - (void)cancelButtonTapped
 {
     [self dismissModalViewControllerAnimated:YES];
     
-    [[self delegate] directoryPickerControllerDidCancel:self];
+    if ([[self delegate] respondsToSelector:@selector(directoryPickerControllerDidCancel:)]) {
+        [[self delegate] directoryPickerControllerDidCancel:self];
+    }
 }
 
 - (void)doneButtonTapped
@@ -64,7 +74,10 @@
     [self dismissModalViewControllerAnimated:YES];
     
     PSDirectoryListViewController *visibleViewController = (PSDirectoryListViewController *)[self visibleViewController];
-    [[self delegate] directoryPickerController:self didFinishPickingDirectoryAtPath:[visibleViewController path]];
+    
+    if ([[self delegate] respondsToSelector:@selector(directoryPickerController:didFinishPickingDirectoryAtPath:)]) {
+        [[self delegate] directoryPickerController:self didFinishPickingDirectoryAtPath:[visibleViewController path]];
+    }
 }
 
 @end
