@@ -69,6 +69,15 @@
     }
 }
 
+- (void)doneWithEntry:(PSDirectoryPickerEntry *)entry
+{
+    [self dismissModalViewControllerAnimated:YES];
+        
+    if ([[self delegate] respondsToSelector:@selector(directoryPickerController:didFinishPickingDirectoryAtPath:)]) {
+        [[self delegate] directoryPickerController:self didFinishPickingDirectoryAtPath:[entry path]];
+    }
+}
+
 - (void)doneButtonTapped
 {
     [self dismissModalViewControllerAnimated:YES];

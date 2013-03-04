@@ -34,27 +34,16 @@
     // Set the prompt text
     [[self navigationItem] setPrompt:[(PSDirectoryPickerController *)[self navigationController] prompt]];
     
-    // Create the "New Folder" button and add it to the navigation bar.
-    UIBarButtonItem *newFolderButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:nil];
-    [newFolderButton setTarget:self];
-    [newFolderButton setAction:@selector(newFolderButtonTapped)];
-    
-    [[self navigationItem] setRightBarButtonItem:newFolderButton];
-    [newFolderButton release];
-    
     // Create toolbar items.
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:[self navigationController] action:@selector(cancelButtonTapped)];
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    NSString *doneButtonTitle = [(PSDirectoryPickerController *)[self navigationController] doneButtonTitle];
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:doneButtonTitle style:UIBarButtonItemStyleDone target:[self navigationController] action:@selector(doneButtonTapped)];
     
     // Add them to the toolbar.
-    [self setToolbarItems:[NSArray arrayWithObjects:cancelButton, flexibleSpace, doneButton, nil]];
+    [self setToolbarItems:[NSArray arrayWithObjects:cancelButton, flexibleSpace, nil]];
     
     [cancelButton release];
     [flexibleSpace release];
-    [doneButton release];
 }
 
 - (void)viewDidUnload
@@ -147,10 +136,8 @@
 
     if ([entry isDir])
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-    else
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    
-    [[cell textLabel] setEnabled:[entry isDir]];
+        
+    //[[cell textLabel] setEnabled:[entry isDir]];
     [[cell textLabel] setText:[entry name]];
         
     
@@ -159,23 +146,22 @@
 
 #pragma mark - Table view delegate
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    PSDirectoryPickerEntry *entry = [[self files] objectAtIndex:[indexPath row]];
-    
-    if ([entry isDir])
-        return indexPath;
-    else
-        return nil;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PSDirectoryPickerEntry *entry = [[self files] objectAtIndex:[indexPath row]];
-    PSDirectoryListViewController *detailViewController = [[PSDirectoryListViewController alloc] initWithDirectoryAtPath:[entry path]];
 
-    [[self navigationController] pushViewController:detailViewController animated:YES];
-    [detailViewController release];
+    if ([entry isDir])
+    {
+        PSDirectoryListViewController *detailViewController = [[PSDirectoryListViewController alloc] initWithDirectoryAtPath:[entry path]];
+        
+        [[self navigationController] pushViewController:detailViewController animated:YES];
+        [detailViewController release];
+    }
+    else
+    {
+        [(PSDirectoryPickerController *)[self navigationController] doneWithEntry:entry];
+    }
+    
 }
 
 @end

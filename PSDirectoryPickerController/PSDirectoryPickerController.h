@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PSDirectoryPickerDelegate.h"
+#import "PSDirectoryPickerEntry.h"
 
 @interface PSDirectoryPickerController : UINavigationController {
     NSString *_rootDirectory;
@@ -23,5 +24,6 @@
 - (id)initWithRootDirectory:(NSString *)directory;
 - (void)cancelButtonTapped;
 - (void)doneButtonTapped;
+- (void)doneWithEntry:(PSDirectoryPickerEntry *)entry;
 
 @end
